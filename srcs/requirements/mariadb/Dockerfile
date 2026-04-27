@@ -1,5 +1,5 @@
 # 1. THE BASE
-FROM debian:12
+FROM debian:11
 
 # 2. THE INSTALLATION
 # Update package list and install MariaDB server. -y skips the confirmation prompt.
@@ -23,4 +23,4 @@ RUN chmod +x /usr/local/bin/setup.sh
 
 # 6. THE EXECUTION
 # Run the script when the container boots
-ENTRYPOINT ["/usr/local/bin/setup.sh"]
+CMD ["/usr/local/bin/setup.sh"]

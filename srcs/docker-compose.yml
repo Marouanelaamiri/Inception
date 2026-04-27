@@ -11,14 +11,14 @@ volumes:
       o: bind
       # device specifies the absolute path on the host system. 
       # Because this points to the native Linux filesystem (/home/), it bypasses your exFAT SSD's permission limitations.
-      device: /home/malaamir/data/mariadb
-      
+      device: ${HOST_VOLUME_PATH}/mariadb
+
   wordpress_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/malaamir/data/wordpress
+      device: ${HOST_VOLUME_PATH}/wordpress
 
 services:
   # ==========================================
@@ -28,7 +28,7 @@ services:
     # container_name forces Docker to use this exact name instead of a random generated one.
     # This is required by the subject and allows other containers to ping it using the name 'mariadb'.
     container_name: mariadb
-    build: 
+    build:
       # context tells Docker where to look for the build files (Dockerfile, conf, tools).
       context: ./requirements/mariadb
       dockerfile: Dockerfile
@@ -51,7 +51,7 @@ services:
   # ==========================================
   wordpress:
     container_name: wordpress
-    build: 
+    build:
       context: ./requirements/wordpress
       dockerfile: Dockerfile
     image: wordpress:inception
@@ -73,9 +73,12 @@ services:
   # ==========================================
   nginx:
     container_name: nginx
-    build: 
+    build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
+    # This passes the variable from .env into the Dockerfile during the 'build' phase
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
     image: nginx:inception
     restart: always
     env_file:
@@ -92,58 +95,9 @@ services:
       - wordpress_data:/var/www/html
     depends_on:
       - wordpress
-
   # ==========================================
-  # 4. BONUS TIER (Placeholder Structure)
+  # CUSTOM NETWORK
   # ==========================================
-  # Uncomment and configure these as you build them.
-  # WARNING: Do NOT add 'ports:' blocks to website, adminer, or redis. 
-  # They must only be accessible through NGINX acting as a reverse proxy.
-  
-  # redis:
-  #   container_name: redis
-  #   build: ./requirements/bonus/redis
-  #   image: redis:inception
-  #   restart: always
-  #   networks:
-  #     - inception_network
-
-  # ftp:
-  #   container_name: ftp
-  #   build: ./requirements/bonus/ftp
-  #   image: ftp:inception
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - inception_network
-  #   volumes:
-  #     # FTP needs access to the WordPress files to upload data
-  #     - wordpress_data:/var/www/html
-  #   ports:
-  #     # FTP requires port 21. Check subject rules on if this is the ONLY permitted extra port.
-  #     - "21:21"
-  # adminer:
-  #   container_name: adminer
-  #   build: ./requirements/bonus/adminer
-  #   image: adminer:inception
-  #   restart: always
-  #   networks:
-  #     - inception_network
-  #   depends_on:
-  #     - mariadb
-
-  # glances: (The Extra Service)
-  #   container_name: glances
-  #   build: ./requirements/bonus/glances
-  #   image: glances:inception
-  #   restart: always
-  #   networks:
-  #     - inception_network
-
-# ==========================================
-# CUSTOM NETWORK
-# ==========================================
 networks:
   inception_network:
     # driver: bridge creates a private internal network. Containers on this network can communicate
