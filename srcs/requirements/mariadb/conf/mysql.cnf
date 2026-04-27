@@ -1,0 +1,13 @@
+[mysqld]
+# Specify the standard user that runs the database process
+user                    = mysql
+
+# Set the port
+port                    = 3306
+
+# The physical location inside the container where data is saved
+datadir                 = /var/lib/mysql
+
+# The critical line: 0.0.0.0 tells it to accept connections from any IP, 
+# which allows the WordPress container to connect.
+bind-address            = 0.0.0.0
