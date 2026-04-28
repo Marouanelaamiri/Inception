@@ -15,10 +15,10 @@ down:
 	$(COMPOSE) down
 
 clean:
-	$(COMPOSE) down -v --rmi all --remove-orphans
+	$(COMPOSE) down
 	sudo rm -rf $(DATA_DIR)
-	docker system prune -af
 
-re: clean up
+re: clean
+	make up
 
-.PHONY: all up down clean re
+.PHONY: all up down clean  re
