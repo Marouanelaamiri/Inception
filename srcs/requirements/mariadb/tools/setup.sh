@@ -10,7 +10,9 @@ if [ ! -d "/var/lib/mysql/${MYSQL_DATABASE}" ]; then
     service mariadb start
     
     # Pause for 2 seconds to ensure the database engine is fully booted before sending commands
-    sleep 2
+    while ! mysqladmin ping -h localhost --silent; do
+        sleep 1
+    done
 
     # Inject the SQL commands using the environment variables
     # 1. Create the database
