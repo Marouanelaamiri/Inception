@@ -44,6 +44,13 @@ services:
     volumes:
       # This mounts the persistent 'mariadb_data' volume to the default MySQL storage path inside the container.
       - mariadb_data:/var/lib/mysql
+  # healthcheck ensures that the container is fully operational before allowing dependent services to start.
+  healthcheck:
+    test: ["CMD", "mysqladmin", "ping", "-h", "mariadb", "--silent"]
+    interval: 10s
+    timeout: 5s
+    retries: 5
+    start_period: 30s
 
   # ==========================================
   # 2. APPLICATION TIER
@@ -65,7 +72,8 @@ services:
     # depends_on delays the start of this container until 'mariadb' is up and running.
     # NOTE: This only checks if the container started, not if the database inside is fully ready.
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
 
   # ==========================================
   # 3. WEB SERVER TIER (The Entrypoint)
