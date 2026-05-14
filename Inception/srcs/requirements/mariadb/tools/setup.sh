@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Check if the WordPress database folder already exists. 
 # If it does, we skip the setup so we don't overwrite existing data.
@@ -32,7 +32,7 @@ if [ ! -d "/var/lib/mysql/${MYSQL_DATABASE}" ]; then
     mysqladmin -u root -p${MYSQL_ROOT_PASSWORD} shutdown
 fi
 
-# The 'exec' command replaces the bash script process with the database process.
+# The 'exec' command replaces the shell script process with the database process.
 # mysqld_safe is the standard command to run MariaDB in the foreground, keeping the container alive.
 echo "Starting MariaDB in the foreground..."
 exec mysqld_safe

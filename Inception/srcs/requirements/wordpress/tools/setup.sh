@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Navigate to the volume directory where the website files will live
 cd /var/www/html

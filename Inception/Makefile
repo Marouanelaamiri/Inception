@@ -19,6 +19,6 @@ clean:
 	sudo rm -rf $(DATA_DIR)
 
 re: clean
-	make up
+	$(MAKE) up
 
-.PHONY: all up down clean  re
+.PHONY: all up down clean re
