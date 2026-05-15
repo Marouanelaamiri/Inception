@@ -1,4 +1,4 @@
-# Inception: line-by-line explanation (expanded, plain English)
+# Inception: line-by-line explanation 
 
 This document walks through the Inception-style stack **step by step**. It explains **what each part does**, **why it exists**, and **how it connects** to the rest. Wording is deliberately simple; technical terms are introduced when needed.
 
